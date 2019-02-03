@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title class="title"></title>
+</head>
+<body>
+<h1>Accounts Users</h1>
+{% if user_list %}
+    {% for user in user_list %}
+<ul>
+    <li>
+        <h2>{{ user.user_name }}</h2>
+        <img src="{{ user.user_avatar.url }}">
+    </li>
+</ul>
+{% endfor %}
+    {% else %}
+    <h1 class="textNoUsersFound">No users found</h1>
+{% endif %}
+    <form action="{%url 'accounts:user-entry' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Add a new user</button>
+    </form>
+</body>
+</html>
