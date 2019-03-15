@@ -7,5 +7,7 @@ To run it, open up the CMD and type:
 
 *py manage.py runserver*
 
+Go to 127.0.0.1/8000
+
 Done!
 
