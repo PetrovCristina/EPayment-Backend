@@ -1,13 +1,19 @@
 # Django-Backend
-Make sure you have Python(and pip) installed!
+Make sure you have Python3 installed!
 
-To run it, open up the CMD and type:
+Install Django
 
-*pip i Django*  or *py -m pip install Django*
+```bash
+pip3 install django
+```
 
-*py manage.py runserver*
+Run
 
-Go to 127.0.0.1/8000
+```bash
+python3 manage.py runserver
+```
+
+Open http://127.0.0.1:8000
 
 Done!
 
