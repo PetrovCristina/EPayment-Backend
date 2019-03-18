@@ -10,6 +10,7 @@ pip3 install django
 Run
 
 ```bash
+python3 manage.py migrate # run this if there are any new migrations
 python3 manage.py runserver
 ```
 
