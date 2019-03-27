@@ -18,11 +18,18 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic.base import TemplateView # new
+from rest_framework import routers
+from accounts import views
+
+router = routers.DefaultRouter()
+router.register(r'accounts', views.UserEntry, 'accounts')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('register/', include('django.contrib.auth.urls')),
     path('', TemplateView.as_view(template_name='home.html'), name='home'), # new
 ]
 
