@@ -5,14 +5,16 @@ from django.urls import reverse
 
 
 class User(models.Model):
-    #the variable to take the inputs
-    user_name=models.CharField(max_length=100, default='')
-    user_surname=models.CharField(max_length=100, default='')
-    user_phone=models.CharField(max_length=100, default='')
-    user_email=models.EmailField(max_length=70, default='')
-    user_pass=models.CharField(max_length=100, default='')
+    # the variable to take the inputs
+    user_name = models.CharField(max_length=100, default='')
+    user_surname = models.CharField(max_length=100, default='')
+    user_phone = models.CharField(max_length=100, default='')
+    user_email = models.EmailField(max_length=70, default='')
+    user_pass = models.CharField(max_length=100, default='')
     profile_pic = models.ImageField(null=True, upload_to='media')
     face_encodings = models.BinaryField(null=True)
-    #on submit click on the user entry page it redirects to the url below
-    def get_absolute_url(self):
+
+    # on submit click on the user entry page it redirects to the url below
+    @staticmethod
+    def get_absolute_url():
         return reverse('accounts:home')

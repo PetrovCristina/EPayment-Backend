@@ -1,34 +1,45 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse_lazy
-from django.views import generic
-from django.views.generic import CreateView
-from accounts.serializers import AccountsSerializer, ProfilePictureSerializer
 from accounts.models import User
-from rest_framework.generics import CreateAPIView
-from rest_framework import parsers, permissions, generics
+from django.contrib.auth.models import User
+from rest_framework import permissions, status, generics, parsers
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import UserSerializer, UserSerializerWithToken, ProfilePictureSerializer
 
-class HomeView(CreateAPIView):
-   # name of the object to be used in the index.html
-    context_object_name = 'user_list'
-    template_name = 'accounts/home_page.html'
-    serializer_class = AccountsSerializer
 
-    def get_queryset(self):
-        return User.objects.all()
-
-#view for the user entry page
-class UserEntry(CreateView):
-    model = User
-    fields = ['user_name', 'user_surname', 'user_phone', 'user_email', 'user_pass']
-
-#view for the image upload
+# view for the image upload
 class ProfilePictureView(generics.CreateAPIView):
-
     permission_classes = (permissions.AllowAny,)
     serializer_class = ProfilePictureSerializer
     parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.FileUploadParser,)
 
     def perform_create(self, serializer):
-
         print(self.request.FILES['profile_pic'])
         serializer.save(user=User.objects.get(pk=2))
+
+
+@api_view(['GET'])
+def current_user(request):
+    """
+    Determine the current user by their token, and return their data
+    """
+
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
+
+
+class UserList(APIView):
+    """
+    Create a new user. It's called 'UserList' because normally we'd have a get
+    method here too, for retrieving a list of all User objects.
+    """
+
+    permission_classes = (permissions.AllowAny,)
+
+    @staticmethod
+    def post(request):
+        serializer = UserSerializerWithToken(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

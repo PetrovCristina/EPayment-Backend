@@ -17,21 +17,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic.base import TemplateView # new
-from rest_framework import routers
-from accounts import views
+from rest_framework_jwt.views import obtain_jwt_token
 
-router = routers.DefaultRouter()
-router.register(r'accounts', views.UserEntry, 'accounts')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
-    path('accounts/', include('accounts.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('register/', include('django.contrib.auth.urls')),
     path('profile-pic/', include('django.contrib.auth.urls')),
-    path('', TemplateView.as_view(template_name='home.html'), name='home'), # new
+    path('token-auth/', obtain_jwt_token),
+    path('accounts/', include('accounts.urls'))
 ]
 
 if settings.DEBUG:

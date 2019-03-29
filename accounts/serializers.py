@@ -1,28 +1,41 @@
 from rest_framework import serializers
-from accounts.models import User
+from rest_framework_jwt.settings import api_settings
+from django.contrib.auth.models import User
 
-
-
-class AccountsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('user_name', 'user_surname', 'user_phone', 'user_email', 'user_pass')
 
 class ProfilePictureSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['profile_pic','user_surname']
-        read_only_fields = ('user_surname',)
+        fields = ['profile_pic', 'username']
+        read_only_fields = ('username',)
 
-class ProfilePictureSerializer(serializers.ModelSerializer):
+
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['profile_pic','user_surname']
-        read_only_fields = ('user_surname',)
+        fields = ('username',)
 
-class ProfilePictureSerializer(serializers.ModelSerializer):
+
+class UserSerializerWithToken(serializers.ModelSerializer):
+    token = serializers.SerializerMethodField()
+    password = serializers.CharField(write_only=True)
+
+    def get_token(self, obj):
+        jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+        jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
+        payload = jwt_payload_handler(obj)
+        token = jwt_encode_handler(payload)
+        return token
+
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
+
     class Meta:
         model = User
-        fields = ['profile_pic','user_surname']
-        read_only_fields = ('user_surname',)
-
+        fields = ('token', 'username', 'password')
