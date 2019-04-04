@@ -1,13 +1,7 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
-
-
-class ProfilePictureSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['profile_pic', 'username']
-        read_only_fields = ('username',)
+from accounts.models import UploadedImage
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,11 +10,18 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('username',)
 
 
+class UploadImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UploadedImage
+        fields = ('pk', 'image',)
+
+
 class UserSerializerWithToken(serializers.ModelSerializer):
     token = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True)
 
-    def get_token(self, obj):
+    @staticmethod
+    def get_token(obj):
         jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
         jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
