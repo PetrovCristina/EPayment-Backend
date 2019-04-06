@@ -5,7 +5,7 @@ from django.urls import reverse
 
 
 class UploadedImage(models.Model):
-    image = models.ImageField("Uploaded image")  # stores the filename of an uploaded image
+    image = models.ImageField("Uploaded image",)  # stores the filename of an uploaded image
 
 
 class User(models.Model):
