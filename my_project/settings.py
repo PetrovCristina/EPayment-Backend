@@ -139,3 +139,5 @@ CORS_ORIGIN_ALLOW_ALL: True
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'my_project.utils.my_jwt_response_handler'
 }
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']

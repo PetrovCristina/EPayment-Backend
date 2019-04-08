@@ -7,13 +7,13 @@ from accounts.models import UploadedImage
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username',)
+        fields = ('username', 'pk', )
 
 
 class UploadImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = UploadedImage
-        fields = ('pk', 'image',)
+        fields = ('pk', 'image', )
 
 
 class UserSerializerWithToken(serializers.ModelSerializer):

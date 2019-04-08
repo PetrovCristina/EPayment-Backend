@@ -7,11 +7,20 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import viewsets
 from accounts.models import UploadedImage
 from .serializers import *
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 
 
 class UploadImageViewset(viewsets.ModelViewSet):
     queryset = UploadedImage.objects.all()
     serializer_class = UploadImageSerializer
+
+
+@api_view(['GET'])
+def list(request):
+    queryset = User.objects.all()
+    serializer = UserSerializer(queryset, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -29,8 +38,9 @@ class UserList(APIView):
     Create a new user. It's called 'UserList' because normally we'd have a get
     method here too, for retrieving a list of all User objects.
     """
-
-    permission_classes = (permissions.AllowAny,)
+    queryset = User.objects.all()
+    serializer_class = UserSerializerWithToken
+    permission_classes = permissions.AllowAny
 
     @staticmethod
     def post(request):

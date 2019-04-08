@@ -9,6 +9,7 @@ router = routers.DefaultRouter()
 router.register('images', UploadImageViewset, 'images')
 urlpatterns = [
     path('current_user/', current_user),
+    path('list/', list),
     path('users/', UserList.as_view()),
     path('', include(router.urls))
 

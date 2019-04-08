@@ -17,6 +17,7 @@ class User(models.Model):
     user_pass = models.CharField(max_length=100, default='')
     face_encodings = models.BinaryField(null=True)
 
+
     # on submit click on the user entry page it redirects to the url below
     @staticmethod
     def get_absolute_url():
