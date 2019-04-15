@@ -40,7 +40,7 @@ class UserList(APIView):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializerWithToken
-    permission_classes = permissions.AllowAny
+    permission_classes = (permissions.AllowAny, )
 
     @staticmethod
     def post(request):
